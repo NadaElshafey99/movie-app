@@ -1,29 +1,89 @@
 package com.example.movieapp.ui.features.home_screen.view
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.R
+import com.example.movieapp.hepers.Constants
+import com.example.movieapp.hepers.UiState
+import com.example.movieapp.model.ErrorFetchMovieList
+import com.example.movieapp.model.Movie
+import com.example.movieapp.model.MovieListResponse
+import com.example.movieapp.ui.common_composable.LoadingIndicator
 import com.example.movieapp.ui.common_composable.MovieItem
+import com.example.movieapp.ui.features.home_screen.viewmodel.MovieHomeScreenViewModel
 import com.example.movieapp.ui.navigation.Screens
 
 @Composable
 fun MovieHomeScreen(navController: NavHostController) {
+    val moviesList = remember {
+        mutableStateListOf<Movie>()
+    }
+    var errorMessage by remember {
+        mutableStateOf("")
+    }
+    var loading by remember {
+        mutableStateOf(false)
+    }
+    val movieViewModel: MovieHomeScreenViewModel = hiltViewModel()
+    val moviesResponse = movieViewModel.moviesResponse.collectAsState()
+    LaunchedEffect(key1 = Unit) {
+        movieViewModel.getMovies()
+    }
+    when (val movies = moviesResponse.value) {
+        is UiState.Loading -> {
+            loading = true
+        }
+
+        is UiState.Success<*> -> {
+            loading = false
+            val movieResponse = (movies as UiState.Success<MovieListResponse>).data
+            moviesList.addAll(movieResponse?.movies ?: emptyList())
+        }
+
+        is UiState.Error<*> -> {
+            loading = false
+            val error = (movies as UiState.Error<ErrorFetchMovieList>).error
+            errorMessage = error?.errorMsg ?: stringResource(id = R.string.unknown_error)
+        }
+
+        is UiState.NetworkException -> {
+            loading = false
+            errorMessage = stringResource(id = R.string.no_network)
+        }
+
+        else -> {}
+    }
+    if (loading) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            LoadingIndicator(loading = true)
+        }
+    }
     MovieHomeScreenContent(
-        movieList = listOf("Movie", "Movie", "Movie"),
+        movieList = moviesList,
         homeNavController = navController
     )
 }
 
 @Composable
 fun MovieHomeScreenContent(
-    movieList: List<String>,
+    movieList: List<Movie>,
     homeNavController: NavHostController
 ) {
     LazyVerticalGrid(
@@ -36,15 +96,10 @@ fun MovieHomeScreenContent(
                 modifier = Modifier.clickable {
                     homeNavController.navigate("${Screens.DetailsScreen.route}/21")
                 },
-                imageUrl = movieList[index],
-                title = movieList[index],
-                subtitle = movieList[index]
+                imageUrl = "${Constants.IMAGE_URL}${movieList[index].posterImg}",
+                title = movieList[index].title,
+                subtitle = movieList[index].releaseDate
             )
         }
     }
-}
-@Preview
-@Composable
-fun MovieHomeScreenPreview() {
-    MovieHomeScreen(navController = rememberNavController())
 }
