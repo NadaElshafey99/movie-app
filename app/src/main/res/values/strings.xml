@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Movie App</string>
+    <string name="unknown_error">There\'s something went wrong. Please Try again!</string>
+    <string name="no_network">There\'s no network connection. Please try again!</string>
 </resources>
