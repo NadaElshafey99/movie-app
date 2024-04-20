@@ -22,9 +22,10 @@ import androidx.navigation.NavHostController
 import com.example.movieapp.R
 import com.example.movieapp.hepers.Constants
 import com.example.movieapp.hepers.UiState
-import com.example.movieapp.model.ErrorFetchMovieList
+import com.example.movieapp.model.ErrorResponse
 import com.example.movieapp.model.Movie
 import com.example.movieapp.model.MovieListResponse
+import com.example.movieapp.ui.common_composable.ErrorDialog
 import com.example.movieapp.ui.common_composable.LoadingIndicator
 import com.example.movieapp.ui.common_composable.MovieItem
 import com.example.movieapp.ui.features.home_screen.viewmodel.MovieHomeScreenViewModel
@@ -49,17 +50,19 @@ fun MovieHomeScreen(navController: NavHostController) {
     when (val movies = moviesResponse.value) {
         is UiState.Loading -> {
             loading = true
+            errorMessage = ""
         }
 
         is UiState.Success<*> -> {
             loading = false
+            errorMessage = ""
             val movieResponse = (movies as UiState.Success<MovieListResponse>).data
             moviesList.addAll(movieResponse?.movies ?: emptyList())
         }
 
         is UiState.Error<*> -> {
             loading = false
-            val error = (movies as UiState.Error<ErrorFetchMovieList>).error
+            val error = (movies as UiState.Error<ErrorResponse>).error
             errorMessage = error?.errorMsg ?: stringResource(id = R.string.unknown_error)
         }
 
@@ -74,6 +77,15 @@ fun MovieHomeScreen(navController: NavHostController) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             LoadingIndicator(loading = true)
         }
+    }
+    if(!loading && errorMessage.isNotEmpty()){
+        ErrorDialog(
+            description = errorMessage,
+            positiveButtonText = R.string.try_again,
+            negativeButtonText = R.string.cancel,
+            animatedId = R.raw.error,
+            onPositiveClick = { movieViewModel.reloadMovies() },
+            onNegativeClick = { navController.popBackStack() })
     }
     MovieHomeScreenContent(
         movieList = moviesList,
@@ -94,7 +106,7 @@ fun MovieHomeScreenContent(
         items(movieList.size) { index ->
             MovieItem(
                 modifier = Modifier.clickable {
-                    homeNavController.navigate("${Screens.DetailsScreen.route}/21")
+                    homeNavController.navigate("${Screens.DetailsScreen.route}/${movieList[index].id}")
                 },
                 imageUrl = "${Constants.IMAGE_URL}${movieList[index].posterImg}",
                 title = movieList[index].title,

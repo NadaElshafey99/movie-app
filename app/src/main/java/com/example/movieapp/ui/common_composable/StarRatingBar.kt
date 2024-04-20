@@ -19,7 +19,7 @@ import kotlin.math.floor
 fun StarRatingBar(
     modifier: Modifier = Modifier,
     rating: Double = 0.0,
-    stars: Int = 5
+    stars: Int = 10
 ) {
     val filledStars = floor(rating).toInt()
     val unfilledStars = (stars - ceil(rating)).toInt()
@@ -27,7 +27,7 @@ fun StarRatingBar(
     Row (modifier = modifier,verticalAlignment = Alignment.CenterVertically){
         repeat(filledStars){
             Icon(
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(18.dp),
                 painter = painterResource(id = R.drawable.fill_star),
                 contentDescription = "rating",
                 tint= Color.Unspecified
@@ -36,7 +36,7 @@ fun StarRatingBar(
         }
         if(halfStars){
             Icon(
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(18.dp),
                 painter = painterResource(id = R.drawable.half_star),
                 contentDescription = "rating",
                 tint= Color.Unspecified
@@ -46,7 +46,7 @@ fun StarRatingBar(
         repeat(unfilledStars){
             Icon(
                 tint= Color.Unspecified,
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(18.dp),
                 painter = painterResource(id = R.drawable.empty_star),
                 contentDescription = "rating",
             )
