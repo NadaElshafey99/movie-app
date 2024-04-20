@@ -1,4 +1,4 @@
-package com.example.movieapp.ui.common_component
+package com.example.movieapp.ui.common_composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
