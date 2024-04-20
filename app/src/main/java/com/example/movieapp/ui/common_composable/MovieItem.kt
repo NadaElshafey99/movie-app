@@ -46,8 +46,8 @@ fun MovieItem(
             model = imageUrl,
             contentDescription = "movie poster",
             contentScale = ContentScale.Crop,
-            placeholder = painterResource(id = R.drawable.poster),
-            error = painterResource(id = R.drawable.error)
+            placeholder = painterResource(id = R.drawable.movie_loading_placeholder),
+            error = painterResource(id = R.drawable.movie_unavailable_image)
         )
         Box(
             modifier = Modifier

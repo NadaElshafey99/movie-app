@@ -1,4 +1,4 @@
-package com.example.movieapp.ui.features.home_screen.viewmodel
+package com.example.movieapp.ui.features.details_screen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,27 +14,27 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieHomeScreenViewModel @Inject constructor(
+class DetailsScreenViewModel @Inject constructor(
     private val movieRepository: IMovieRepository
-): ViewModel() {
+) : ViewModel() {
+    private val _movieResponse = MutableStateFlow<UiState?>(UiState.Loading)
+    val movieResponse
+        get() = _movieResponse.asStateFlow()
 
-    private val _moviesResponse = MutableStateFlow<UiState?>(UiState.Loading)
-    val moviesResponse
-        get() = _moviesResponse.asStateFlow()
-    fun getMovies() {
+    fun getDetailsForSelectedMovie(movieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val movies = movieRepository.fetchMovies()
-            withContext(Dispatchers.Main) {
-                _moviesResponse.value = movies
+            val movie = movieRepository.getDetailsForSelectedMovie(movieId)
+            withContext(Dispatchers.Main){
+                _movieResponse.value = movie
             }
         }
     }
 
-    fun reloadMovies() {
+    fun reloadDetailedMovie(movieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            _moviesResponse.value = UiState.Loading
+            _movieResponse.value = UiState.Loading
             delay(2000L)
-            getMovies()
+            getDetailsForSelectedMovie(movieId = movieId)
         }
     }
 }

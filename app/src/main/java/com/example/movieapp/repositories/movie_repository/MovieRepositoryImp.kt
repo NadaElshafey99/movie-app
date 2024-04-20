@@ -7,4 +7,6 @@ import javax.inject.Inject
 class MovieRepositoryImp @Inject constructor(private val remoteDataSource: IRemoteDataSource) :
     IMovieRepository {
     override suspend fun fetchMovies(): UiState = remoteDataSource.fetchMovies()
+    override suspend fun getDetailsForSelectedMovie(movieId: Int): UiState =
+        remoteDataSource.getDetailsForSelectedMovie(movieId)
 }
