@@ -27,12 +27,13 @@ import com.example.movieapp.R
 
 @Composable
 fun MovieItem(
+    modifier: Modifier = Modifier,
     imageUrl: String,
     title: String,
     subtitle: String
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .padding(8.dp)
             .size(240.dp)
             .clip(RoundedCornerShape(8))

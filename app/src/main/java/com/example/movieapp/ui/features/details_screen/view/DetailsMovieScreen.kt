@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,17 +29,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.movieapp.R
 import com.example.movieapp.ui.common_composable.ActorItem
 import com.example.movieapp.ui.common_composable.StarRatingBar
 
 @Composable
-fun DetailsMovieScreen() {
+fun DetailsMovieScreen(navController: NavHostController, movieId: Int?) {
+    DetailsMovieContentScreen(
+        detailsNavController = navController,
+        movie = "Movie"
+    )
 }
 
 @Composable
-fun DetailsMovieContentScreen(
+private fun DetailsMovieContentScreen(
+    detailsNavController: NavHostController,
     movie: String
 ) {
     Box {
@@ -59,11 +67,13 @@ fun DetailsMovieContentScreen(
                 .drawBehind { drawCircle(color = Color.LightGray) },
             contentAlignment = Alignment.Center
         ) {
-            Icon(
-                modifier = Modifier.size(16.dp),
-                painter = painterResource(id = R.drawable.back_arrow),
-                contentDescription = "back_arrow"
-            )
+            IconButton(onClick = { detailsNavController.popBackStack() }) {
+                Icon(
+                    modifier = Modifier.size(16.dp),
+                    painter = painterResource(id = R.drawable.back_arrow),
+                    contentDescription = "back_arrow"
+                )
+            }
         }
 
         Column(
@@ -122,5 +132,5 @@ fun DetailsMovieContentScreen(
 @Preview
 @Composable
 fun DetailsMovieScreenPreview() {
-    DetailsMovieContentScreen(movie = "")
+    DetailsMovieContentScreen(detailsNavController = rememberNavController(), movie = "")
 }
