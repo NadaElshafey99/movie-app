@@ -3,8 +3,10 @@ package com.example.movieapp.ui.common_composable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,13 +30,13 @@ import com.example.movieapp.R
 @Composable
 fun MovieItem(
     modifier: Modifier = Modifier,
-    imageUrl: String,
+    imageUrl: String?,
     title: String,
     subtitle: String
 ) {
     Box(
         modifier = modifier
-            .padding(8.dp)
+            .padding(12.dp)
             .size(240.dp)
             .clip(RoundedCornerShape(8))
     ) {
@@ -44,8 +46,8 @@ fun MovieItem(
             model = imageUrl,
             contentDescription = "movie poster",
             contentScale = ContentScale.Crop,
-            placeholder = painterResource(id = R.drawable.poster),
-            error = painterResource(id = R.drawable.error)
+            placeholder = painterResource(id = R.drawable.movie_loading_placeholder),
+            error = painterResource(id = R.drawable.movie_unavailable_image)
         )
         Box(
             modifier = Modifier
@@ -66,6 +68,7 @@ fun MovieItem(
                         fontSize = 16.sp
                     )
                 )
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = subtitle,
                     style = TextStyle(

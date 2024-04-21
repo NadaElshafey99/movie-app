@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Movie App</string>
+    <string name="unknown_error">There\'s something went wrong. Please Try again!</string>
+    <string name="no_network">There\'s no network connection. Please try again!</string>
+    <string name="to_watch_movie">To watch the movie, please visit this link:  </string>
+    <string name="description">"Description:  "</string>
+    <string name="try_again">Try Again</string>
+    <string name="cancel">Cancel</string>
+    <string name="trending_movies">Trending Movies</string>
+    <string name="search">Search</string>
 </resources>
