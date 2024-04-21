@@ -9,4 +9,6 @@ class MovieRepositoryImp @Inject constructor(private val remoteDataSource: IRemo
     override suspend fun fetchMovies(): UiState = remoteDataSource.fetchMovies()
     override suspend fun getDetailsForSelectedMovie(movieId: Int): UiState =
         remoteDataSource.getDetailsForSelectedMovie(movieId)
+
+    override suspend fun searchMovies(wordSearchOn: String): UiState = remoteDataSource.searchOnMovie(wordSearchOn)
 }

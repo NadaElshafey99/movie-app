@@ -44,4 +44,27 @@ class RemoteDataSourceImp @Inject constructor(private val movieService: MovieSer
             UiState.Error(response.errorBody())
         }
     }
+
+    override suspend fun searchOnMovie(wordSearchOn: String): UiState {
+        return try {
+            val response = movieService.searchMovie(
+                header = Constants.HEADER,
+                wordsSearchOn = wordSearchOn,
+                apiKey = Constants.API_KEY
+            )
+            if (response.isSuccessful) {
+                UiState.Success(response.body())
+            } else {
+                val errorBody = Gson().fromJson(
+                    response.errorBody()?.charStream(),
+                    ErrorResponse::class.java
+                )
+                UiState.Error(errorBody)
+            }
+        } catch (e: IOException) {
+            UiState.NetworkException
+        } catch (ex: Exception) {
+            UiState.Error(null)
+        }
+    }
 }

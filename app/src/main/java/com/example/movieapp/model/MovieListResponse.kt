@@ -15,4 +15,13 @@ data class Movie(
     val title: String,
     @SerializedName("release_date")
     val releaseDate: String,
-)
+){
+    fun doesMatchSearchQuery(word: String): Boolean{
+        val matchingCombination = listOf(
+            title
+        )
+        return matchingCombination.any {
+            it.contains(word, true)
+        }
+    }
+}
