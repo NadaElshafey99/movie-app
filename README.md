@@ -43,7 +43,15 @@ This is an Android application that allows users to browse movies, view their de
      - Displays a friendly error message when there is an API or unknown error.
 
 
+## Technologies Used
 
+- Android SDK (including Jetpack Compose)
+- Dagger Hilt (for dependency injection)
+- Retrofit (for API requests)
+- Coroutines (for asynchronous programming)
+- MVVM architecture pattern
+
+  
 ## Screenshots
 
 ### <b>Home screen</b>
