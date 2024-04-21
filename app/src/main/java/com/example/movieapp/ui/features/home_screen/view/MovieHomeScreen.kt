@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.movieapp.MainActivity
 import com.example.movieapp.R
 import com.example.movieapp.hepers.Constants
 import com.example.movieapp.hepers.UiState
@@ -115,14 +117,15 @@ fun MovieHomeScreen(navController: NavHostController) {
             LoadingIndicator(loading = true)
         }
     }
-    if(!loading && errorMessage.isNotEmpty()){
+    if(!loading && errorMessage.isNotEmpty()) {
+        val context = LocalContext.current
         ErrorDialog(
             description = errorMessage,
             positiveButtonText = R.string.try_again,
             negativeButtonText = R.string.cancel,
             animatedId = R.raw.error,
             onPositiveClick = { movieViewModel.reloadMovies() },
-            onNegativeClick = { navController.popBackStack() })
+            onNegativeClick = { (context as MainActivity).finish() })
     }
     MovieHomeScreenContent(
         movieList = moviesList,
