@@ -41,7 +41,11 @@ class RemoteDataSourceImp @Inject constructor(private val movieService: MovieSer
         return if (response.isSuccessful) {
             UiState.Success(response.body())
         } else {
-            UiState.Error(response.errorBody())
+            val errorBody = Gson().fromJson(
+                response.errorBody()?.charStream(),
+                ErrorResponse::class.java
+            )
+            UiState.Error(errorBody)
         }
     }
 }
