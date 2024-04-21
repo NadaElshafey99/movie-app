@@ -6,4 +6,6 @@
     <string name="description">"Description:  "</string>
     <string name="try_again">Try Again</string>
     <string name="cancel">Cancel</string>
+    <string name="trending_movies">Trending Movies</string>
+    <string name="search">Search</string>
 </resources>

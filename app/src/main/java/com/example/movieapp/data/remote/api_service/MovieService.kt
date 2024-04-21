@@ -23,4 +23,11 @@ interface MovieService {
         @Query("api_key") apiKey: String,
     ): Response<SingleMovieResponse>
 
+    @GET("search/movie")
+    suspend fun searchMovie(
+        @Header("accept") header: String,
+        @Query("query") wordsSearchOn: String,
+        @Query("api_key") apiKey: String,
+    ): Response<MovieListResponse>
+
 }
